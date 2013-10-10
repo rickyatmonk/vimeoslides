@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Vimeo Test</title>
+</head>
+<body>
+
+<div id="rotator" class="cycle-slideshow" 
+    data-cycle-timeout=4000 
+    data-cycle-slides="> .slide">
+
+  <div class='slide'>
+    <iframe id="vimeo-embed-1" src="//player.vimeo.com/video/76482820?title=0&byline=0&portrait=0&badge=0&color=0887ff&api=1&player_id=vimeo-embed-1" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+  </div>
+
+  <div class='slide'>
+    <iframe id="vimeo-embed-2" src="//player.vimeo.com/video/74868773?title=0&byline=0&portrait=0&color=0887ff&api=1&player_id=vimeo-embed-2" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+  </div>
+
+  <div class="cycle-pager"></div>
+
+</div>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="http://a.vimeocdn.com/js/froogaloop2.min.js"></script>
+<script src="jquery.vimeoslides.js"></script>
+<script src="jquery.cycle2.min.js"></script>
+
+
+<script type='text/javascript'>
+
+  $(document).ready(function(){
+
+    // Register the callback functions.
+    $('#rotator').vimeoslides({
+      onPause: function(playerID){
+
+        // The video has been paused.
+        $('#'+playerID).attr('video-status', 'paused');
+        console.log("Video Paused. (Custom Callback)");
+
+      },
+      onPlay: function(playerID){
+
+        // The video is playing. Let's pause the rotator.
+        $('#'+playerID).attr('video-status', 'playing');
+        console.log("Video Playing. (Custom Callback)");
+
+        $('#rotator').cycle('pause');
+
+      },
+      onFinish: function(playerID){
+
+        // The video just finished. Let's resume the rotator and move on to the next slide.
+        console.log("Video Finished. (Custom Callback)");
+        $('#'+playerID).attr('video-status', 'finished');
+        $('#rotator').cycle('resume');
+        $('#rotator').cycle('next');
+
+      }
+    });
+
+
+    $('#rotator').on('cycle-after', function(event, optionHash, outgoingSlideEl, incomingSlideEl, forwardFlag){
+
+      var prevVideo = $(outgoingSlideEl).find('iframe[src*="player.vimeo"]');
+      if(prevVideo.length > 0){
+
+        var prevVideoStatus = prevVideo.attr('video-status');
+
+        console.log("Previous video status is: " + prevVideoStatus);
+        // Pause the previous video if necessary.
+        if (prevVideoStatus == 'playing') {
+
+          console.log("Pausing video because the slide changed.");
+          $(prevVideo).vimeoslides('pause');
+          console.log("Resuming the rotator");
+          $('#rotator').cycle('resume');
+
+        }
+      }
+
+
+    });
+
+  });
+        
+</script>  
+
+
+</body>
+</html>
