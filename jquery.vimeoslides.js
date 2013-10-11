@@ -1,3 +1,13 @@
+/*!
+ * jquery.vimeoslides v1.0
+ *
+ * This plugin is a resource for interacting with embedded vimeo videos. It abstracts the functionality
+ * of Vimeo's Froogaloop library to making the implementation of controlled Vimeo videos much quicker.
+ *
+ * The way that froogaloop is utilized was inspired by http://labs.funkhausdesign.com/examples/vimeo/froogaloop2-api-basics.html.
+ *
+ */
+
 (function ( $ ) {
   'use strict';
 
